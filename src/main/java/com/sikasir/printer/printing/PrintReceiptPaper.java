@@ -29,15 +29,19 @@ public class PrintReceiptPaper {
 
         documentPageFormat.setOrientation(conf.getOrientation());
         documentPageFormat.setPaper(createPaper(conf));
-        JSONArray array = new JSONArray(this.receipt);
+        if (this.receipt.startsWith("[")) {
+            JSONArray array = new JSONArray(this.receipt);
 
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject object = array.getJSONObject(i);
-            if (object.getString("type").equals("string")) {
-                hasil = hasil.concat(object.getString("content")).concat("#");
-            } else if (object.getString("type").equals("img/png")) {
-                hasil = hasil.concat(object.getString("content").substring(22)).concat("#");
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = array.getJSONObject(i);
+                if (object.getString("type").equals("string")) {
+                    hasil = hasil.concat(object.getString("content")).concat("#");
+                } else if (object.getString("type").equals("img/png")) {
+                    hasil = hasil.concat(object.getString("content").substring(22)).concat("#");
+                }
             }
+        } else {
+            hasil = this.receipt;
         }
 
         book.append(new Receipt(hasil, conf), documentPageFormat);
