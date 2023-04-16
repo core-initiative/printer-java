@@ -3,3 +3,4 @@ target/
 .hgignore
 *.jar
 *.iml
+.vscode
